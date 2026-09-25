@@ -136,7 +136,7 @@ export const TUTORIAL_CHAPTERS: TutorialChapter[] = [
 
 <h2>分类、标签、书单</h2>
 <ul>
-  <li><strong>分类</strong>是一棵浅树（文学、科技、历史……），一本书最多属于一个分类，用于书架上的主导航。</li>
+  <li><strong>分类</strong>是一组扁平的条目（文学、科技、历史……），一本书最多属于一个，用于目录页上的筛选。</li>
   <li><strong>标签</strong>是自由关键词，一本书可以有很多个，用于进一步筛选。</li>
   <li><strong>书单</strong>是人工挑选的合集，可以跨分类、跨作者地组织，例如「今年要读完的十本」。</li>
 </ul>
