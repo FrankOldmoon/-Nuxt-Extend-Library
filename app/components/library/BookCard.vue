@@ -40,12 +40,12 @@ function statusLabel(status: string): string {
 
 <template>
   <div
-    class="group flex flex-col overflow-hidden rounded-lg border border-default bg-default transition hover:shadow-lg"
+    class="group flex h-full flex-col overflow-hidden rounded-lg border border-default bg-default transition hover:shadow-lg"
     :class="view === 'list' ? 'sm:flex-row' : ''"
   >
     <!-- Cover (clickable) -->
     <NuxtLink
-      :to="`/library/book/${book.id}`"
+      :to="`/book/${book.id}`"
       class="relative block shrink-0 overflow-hidden bg-muted"
       :class="view === 'list' ? 'aspect-[2/3] w-28 sm:w-32' : 'aspect-[2/3] w-full'"
     >
@@ -54,6 +54,14 @@ function statusLabel(status: string): string {
         :title="book.title"
       />
       <div class="absolute left-1.5 top-1.5 flex flex-wrap gap-1">
+        <UBadge
+          v-if="book.hasMindmap"
+          color="primary"
+          variant="solid"
+          size="sm"
+          icon="i-lucide-git-fork"
+          :title="t('library.mindmap.title')"
+        />
         <UBadge
           v-for="fmt in book.formats.slice(0, 3)"
           :key="fmt"
@@ -79,7 +87,7 @@ function statusLabel(status: string): string {
     <div class="flex flex-1 flex-col p-3">
       <div class="flex items-start justify-between gap-2">
         <NuxtLink
-          :to="`/library/book/${book.id}`"
+          :to="`/book/${book.id}`"
           class="line-clamp-2 font-semibold text-highlighted hover:text-primary"
         >
           {{ book.title }}
@@ -137,7 +145,7 @@ function statusLabel(status: string): string {
       <div class="mt-auto flex items-center gap-1 pt-3">
         <UButton
           v-if="book.primaryFileId"
-          :to="`/library/read/${book.id}`"
+          :to="`/read/${book.id}`"
           size="xs"
           color="primary"
           variant="soft"
@@ -145,7 +153,7 @@ function statusLabel(status: string): string {
           :label="t('library.actions.read')"
         />
         <UButton
-          :to="`/library/book/${book.id}`"
+          :to="`/book/${book.id}`"
           size="xs"
           color="neutral"
           variant="ghost"

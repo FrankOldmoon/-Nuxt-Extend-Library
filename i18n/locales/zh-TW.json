@@ -164,11 +164,41 @@
   "library": {
     "title": "圖書館",
     "subtitle": "私人電子書庫",
-    "browse": "瀏覽",
+    "browse": {
+      "authors": "作者",
+      "series": "系列",
+      "publishers": "出版社",
+      "tags": "標籤",
+      "count": "{count}",
+      "empty": "尚無內容。"
+    },
     "books": "圖書",
     "allBooks": "全部圖書",
-    "shelf": "我的書架",
-    "collections": "書單",
+    "shelf": {
+      "title": "我的書架",
+      "reading": "繼續閱讀",
+      "finished": "已讀完",
+      "favorites": "收藏",
+      "empty": "書架還是空的，收藏圖書或開始閱讀吧。",
+      "emptyFavorites": "還沒有收藏。",
+      "emptyReading": "沒有在讀的書。",
+      "emptyFinished": "還沒有讀完的書。"
+    },
+    "collections": {
+      "title": "書單",
+      "new": "新增書單",
+      "name": "名稱",
+      "namePlaceholder": "例如：科幻必讀",
+      "description": "描述",
+      "empty": "還沒有書單。",
+      "emptyBooks": "這個書單還是空的。",
+      "bookCount": "{count} 本",
+      "remove": "從書單移除",
+      "created": "書單已建立",
+      "deleted": "書單已刪除",
+      "addSuccess": "已加入書單",
+      "removeSuccess": "已從書單移除"
+    },
     "stats": {
       "books": "圖書",
       "authors": "作者",
@@ -189,7 +219,9 @@
     },
     "view": {
       "grid": "網格",
-      "list": "清單"
+      "list": "清單",
+      "perPage": "每頁數量",
+      "perPageUnit": "頁"
     },
     "filters": {
       "title": "篩選",
@@ -261,45 +293,12 @@
       "views": "瀏覽",
       "reads": "閱讀"
     },
-    "shelf": {
-      "title": "我的書架",
-      "reading": "繼續閱讀",
-      "finished": "已讀完",
-      "favorites": "收藏",
-      "empty": "書架還是空的，收藏圖書或開始閱讀吧。",
-      "emptyFavorites": "還沒有收藏。",
-      "emptyReading": "沒有在讀的書。",
-      "emptyFinished": "還沒有讀完的書。"
-    },
     "trash": {
       "title": "回收筒",
       "hint": "回收筒中的圖書不會出現在書架，可還原或永久刪除。",
       "back": "返回書架",
       "empty": "回收筒是空的。",
       "purgeConfirm": "確定永久刪除這本書？此操作無法復原。"
-    },
-    "collections": {
-      "title": "書單",
-      "new": "新增書單",
-      "name": "名稱",
-      "namePlaceholder": "例如：科幻必讀",
-      "description": "描述",
-      "empty": "還沒有書單。",
-      "emptyBooks": "這個書單還是空的。",
-      "bookCount": "{count} 本",
-      "remove": "從書單移除",
-      "created": "書單已建立",
-      "deleted": "書單已刪除",
-      "addSuccess": "已加入書單",
-      "removeSuccess": "已從書單移除"
-    },
-    "browse": {
-      "authors": "作者",
-      "series": "系列",
-      "publishers": "出版社",
-      "tags": "標籤",
-      "count": "{count}",
-      "empty": "尚無內容。"
     },
     "upload": {
       "title": "上傳圖書",
@@ -462,6 +461,18 @@
     "empty": {
       "noBooks": "圖書庫還是空的，先上傳第一本書吧。",
       "noResults": "沒有符合篩選條件的圖書。"
+    },
+    "mindmap": {
+      "title": "思維導圖",
+      "view": "思維導圖",
+      "backToBook": "返回詳情",
+      "loading": "導圖載入中…",
+      "notFound": "本書暫無思維導圖",
+      "loadFailed": "導圖載入失敗",
+      "hint": "拖曳平移 · 滾輪/雙指縮放 · 點擊圓點展開",
+      "nodes": "節點",
+      "domains": "域",
+      "cards": "卡"
     }
   }
 }

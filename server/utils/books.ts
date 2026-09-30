@@ -77,6 +77,8 @@ export interface BookListItem {
   updatedAt: string | null
   formats: string[]
   primaryFileId: number | null
+  /** Whether the book carries a mindmap outline (`lib_mindmaps`). */
+  hasMindmap: boolean
   progress: { status: string, percent: number, chapterIndex: number, location: string | null } | null
   favorited: boolean
 }
@@ -115,6 +117,18 @@ async function fetchBookFormats(bookIds: number[]): Promise<Map<number, { format
     map.set(row.bookId, entry)
   }
   return map
+}
+
+/** Fetch which of the given books carry a mindmap outline. */
+async function fetchMindmapFlags(bookIds: number[]): Promise<Set<number>> {
+  const set = new Set<number>()
+  if (!bookIds.length) return set
+  const rows = await db
+    .select({ bookId: lib.libMindmaps.bookId })
+    .from(lib.libMindmaps)
+    .where(inArray(lib.libMindmaps.bookId, bookIds))
+  for (const row of rows) set.add(row.bookId)
+  return set
 }
 
 /** Fetch the viewer's progress + favourite flags for the given books. */
@@ -165,10 +179,11 @@ function iso(value: Date | string | null | undefined): string | null {
  */
 export async function hydrateBooks(rows: lib.LibBook[], viewer: Viewer): Promise<BookListItem[]> {
   const ids = rows.map(r => r.id)
-  const [authors, formats, state] = await Promise.all([
+  const [authors, formats, state, mindmaps] = await Promise.all([
     fetchBookAuthors(ids),
     fetchBookFormats(ids),
-    fetchViewerState(ids, viewer)
+    fetchViewerState(ids, viewer),
+    fetchMindmapFlags(ids)
   ])
 
   // Resolve the series / publisher / category lookups in three batched queries.
@@ -224,6 +239,7 @@ export async function hydrateBooks(rows: lib.LibBook[], viewer: Viewer): Promise
       updatedAt: iso(book.updatedAt),
       formats: fileMeta.formats,
       primaryFileId: fileMeta.primaryFileId,
+      hasMindmap: mindmaps.has(book.id),
       progress: state.progress.get(book.id) ?? null,
       favorited: state.favorites.has(book.id)
     }

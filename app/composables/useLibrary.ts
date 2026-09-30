@@ -51,6 +51,8 @@ export interface LibraryBook {
   updatedAt: string | null
   formats: string[]
   primaryFileId: number | null
+  /** Whether the book carries a mindmap outline (`lib_mindmaps`). */
+  hasMindmap: boolean
   progress: BookProgress | null
   favorited: boolean
 }
@@ -286,6 +288,27 @@ export function useLibraryReader(id: number) {
     }
     return { detail, content, contentError }
   })
+}
+
+/** Mindmap outline of one book (markmap-compatible Markdown). */
+export interface LibraryMindmap {
+  id: number
+  bookId: number
+  bookTitle: string
+  content: string
+  /** Aggregated outline statistics (节点 / 域 / 卡). */
+  nodes: number
+  domains: number
+  cards: number
+  /** Optional completeness note (采集完整度说明). */
+  note: string | null
+}
+
+/** Fetch one book's mindmap outline (SSR-friendly). */
+export function useLibraryMindmap(id: number) {
+  const requestFetch = useLibraryFetch()
+  return useAsyncData<LibraryMindmap>(`library:mindmap:${id}`, () =>
+    requestFetch<LibraryMindmap>(`/api/library/books/${id}/mindmap`))
 }
 
 /** Fetch the viewer's shelf (progress entries). */

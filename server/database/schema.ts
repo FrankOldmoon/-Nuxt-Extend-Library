@@ -318,6 +318,38 @@ export const libBookChapters = pgTable('lib_book_chapters',
   ]
 )
 
+/**
+ * Book mindmap outline (markmap-compatible Markdown) plus the statistics that
+ * were computed when the outline was generated. One outline per book — the
+ * book_id unique index makes re-imports / edits an upsert. Like
+ * `lib_book_chapters` this is derived data, so it is not registered in the
+ * dashboard CRUD.
+ */
+export const libMindmaps = pgTable('lib_mindmaps',
+  {
+    id: serial('id').primaryKey(),
+    bookId: integer('book_id').notNull().references(() => libBooks.id, { onDelete: 'cascade' }),
+    // Mindmap outline as Markdown (headings + nested lists), parsed by markmap-lib.
+    content: text('content').notNull(),
+    // Aggregated counters shown on the card / viewer (节点 · 域 · 卡).
+    nodes: integer('nodes').notNull().default(0),
+    domains: integer('domains').notNull().default(0),
+    cards: integer('cards').notNull().default(0),
+    // Optional completeness note (采集完整度说明) shown as a warning banner.
+    note: text('note'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow()
+  },
+  t => [
+    uniqueIndex('lib_mindmaps_book_idx').on(t.bookId)
+  ]
+)
+
+export type LibBookChapter = typeof libBookChapters.$inferSelect
+export type NewLibBookChapter = typeof libBookChapters.$inferInsert
+export type LibMindmap = typeof libMindmaps.$inferSelect
+export type NewLibMindmap = typeof libMindmaps.$inferInsert
+
 export type LibCategory = typeof libCategories.$inferSelect
 export type NewLibCategory = typeof libCategories.$inferInsert
 export type LibAuthor = typeof libAuthors.$inferSelect

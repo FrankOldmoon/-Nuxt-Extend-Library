@@ -207,6 +207,19 @@ CREATE TABLE IF NOT EXISTS lib_book_chapters (
   created_at    timestamptz NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS lib_book_chapters_book_idx ON lib_book_chapters (book_id, chapter_index);
+
+CREATE TABLE IF NOT EXISTS lib_mindmaps (
+  id         serial PRIMARY KEY,
+  book_id    integer NOT NULL REFERENCES lib_books(id) ON DELETE CASCADE,
+  content    text    NOT NULL,
+  nodes      integer NOT NULL DEFAULT 0,
+  domains    integer NOT NULL DEFAULT 0,
+  cards      integer NOT NULL DEFAULT 0,
+  note       text,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE UNIQUE INDEX IF NOT EXISTS lib_mindmaps_book_idx ON lib_mindmaps (book_id);
 `
 
 /**

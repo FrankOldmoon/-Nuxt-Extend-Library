@@ -1,0 +1,11 @@
+{
+  "name": "library-module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "私人图书馆 · Nuxt Library Layer — 模块自有的第三方依赖（由宿主 pnpm workspace 安装）",
+  "dependencies": {
+    "d3": "^7.9.0",
+    "markmap-lib": "^0.18.12",
+    "markmap-view": "^0.18.12"
+  }
+}

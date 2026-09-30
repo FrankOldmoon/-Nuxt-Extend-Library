@@ -164,11 +164,41 @@
   "library": {
     "title": "图书馆",
     "subtitle": "私人电子书库",
-    "browse": "浏览",
+    "browse": {
+      "authors": "作者",
+      "series": "系列",
+      "publishers": "出版社",
+      "tags": "标签",
+      "count": "{count}",
+      "empty": "暂无内容。"
+    },
     "books": "图书",
     "allBooks": "全部图书",
-    "shelf": "我的书架",
-    "collections": "书单",
+    "shelf": {
+      "title": "我的书架",
+      "reading": "继续阅读",
+      "finished": "已读完",
+      "favorites": "收藏",
+      "empty": "书架还是空的，收藏图书或开始阅读吧。",
+      "emptyFavorites": "还没有收藏。",
+      "emptyReading": "没有在读的书。",
+      "emptyFinished": "还没有读完的书。"
+    },
+    "collections": {
+      "title": "书单",
+      "new": "新建书单",
+      "name": "名称",
+      "namePlaceholder": "例如：科幻必读",
+      "description": "描述",
+      "empty": "还没有书单。",
+      "emptyBooks": "这个书单还是空的。",
+      "bookCount": "{count} 本",
+      "remove": "从书单移除",
+      "created": "书单已创建",
+      "deleted": "书单已删除",
+      "addSuccess": "已加入书单",
+      "removeSuccess": "已从书单移除"
+    },
     "stats": {
       "books": "图书",
       "authors": "作者",
@@ -189,7 +219,9 @@
     },
     "view": {
       "grid": "网格",
-      "list": "列表"
+      "list": "列表",
+      "perPage": "每页数量",
+      "perPageUnit": "页"
     },
     "filters": {
       "title": "筛选",
@@ -261,45 +293,12 @@
       "views": "浏览",
       "reads": "阅读"
     },
-    "shelf": {
-      "title": "我的书架",
-      "reading": "继续阅读",
-      "finished": "已读完",
-      "favorites": "收藏",
-      "empty": "书架还是空的，收藏图书或开始阅读吧。",
-      "emptyFavorites": "还没有收藏。",
-      "emptyReading": "没有在读的书。",
-      "emptyFinished": "还没有读完的书。"
-    },
     "trash": {
       "title": "回收站",
       "hint": "回收站中的图书不会出现在书架，可恢复或彻底删除。",
       "back": "返回书架",
       "empty": "回收站是空的。",
       "purgeConfirm": "确定彻底删除这本书？此操作不可恢复。"
-    },
-    "collections": {
-      "title": "书单",
-      "new": "新建书单",
-      "name": "名称",
-      "namePlaceholder": "例如：科幻必读",
-      "description": "描述",
-      "empty": "还没有书单。",
-      "emptyBooks": "这个书单还是空的。",
-      "bookCount": "{count} 本",
-      "remove": "从书单移除",
-      "created": "书单已创建",
-      "deleted": "书单已删除",
-      "addSuccess": "已加入书单",
-      "removeSuccess": "已从书单移除"
-    },
-    "browse": {
-      "authors": "作者",
-      "series": "系列",
-      "publishers": "出版社",
-      "tags": "标签",
-      "count": "{count}",
-      "empty": "暂无内容。"
     },
     "upload": {
       "title": "上传图书",
@@ -462,6 +461,18 @@
     "empty": {
       "noBooks": "图书库还是空的，先上传第一本书吧。",
       "noResults": "没有符合筛选条件的图书。"
+    },
+    "mindmap": {
+      "title": "思维导图",
+      "view": "思维导图",
+      "backToBook": "返回详情",
+      "loading": "导图加载中…",
+      "notFound": "本书暂无思维导图",
+      "loadFailed": "导图加载失败",
+      "hint": "拖动平移 · 滚轮/双指缩放 · 点击圆点展开",
+      "nodes": "节点",
+      "domains": "域",
+      "cards": "卡"
     }
   }
 }

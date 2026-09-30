@@ -164,11 +164,41 @@
   "library": {
     "title": "Library",
     "subtitle": "Your private ebook collection",
-    "browse": "Browse",
+    "browse": {
+      "authors": "Authors",
+      "series": "Series",
+      "publishers": "Publishers",
+      "tags": "Tags",
+      "count": "{count}",
+      "empty": "Nothing here yet."
+    },
     "books": "Books",
     "allBooks": "All books",
-    "shelf": "My shelf",
-    "collections": "Book lists",
+    "shelf": {
+      "title": "My shelf",
+      "reading": "Continue reading",
+      "finished": "Finished",
+      "favorites": "Favourites",
+      "empty": "Your shelf is empty. Add books to your favourites or start reading.",
+      "emptyFavorites": "No favourites yet.",
+      "emptyReading": "Nothing in progress.",
+      "emptyFinished": "No finished books yet."
+    },
+    "collections": {
+      "title": "Book lists",
+      "new": "New book list",
+      "name": "Name",
+      "namePlaceholder": "e.g. Must-read sci-fi",
+      "description": "Description",
+      "empty": "No book lists yet.",
+      "emptyBooks": "This book list is empty.",
+      "bookCount": "{count} book(s)",
+      "remove": "Remove from list",
+      "created": "Book list created",
+      "deleted": "Book list deleted",
+      "addSuccess": "Added to the book list",
+      "removeSuccess": "Removed from the book list"
+    },
     "stats": {
       "books": "Books",
       "authors": "Authors",
@@ -189,7 +219,9 @@
     },
     "view": {
       "grid": "Grid",
-      "list": "List"
+      "list": "List",
+      "perPage": "Per page",
+      "perPageUnit": "page"
     },
     "filters": {
       "title": "Filters",
@@ -261,45 +293,12 @@
       "views": "Views",
       "reads": "Reads"
     },
-    "shelf": {
-      "title": "My shelf",
-      "reading": "Continue reading",
-      "finished": "Finished",
-      "favorites": "Favourites",
-      "empty": "Your shelf is empty. Add books to your favourites or start reading.",
-      "emptyFavorites": "No favourites yet.",
-      "emptyReading": "Nothing in progress.",
-      "emptyFinished": "No finished books yet."
-    },
     "trash": {
       "title": "Recycle bin",
       "hint": "Trashed books stay here until restored or purged.",
       "back": "Back to shelf",
       "empty": "The recycle bin is empty.",
       "purgeConfirm": "Permanently delete this book? This cannot be undone."
-    },
-    "collections": {
-      "title": "Book lists",
-      "new": "New book list",
-      "name": "Name",
-      "namePlaceholder": "e.g. Must-read sci-fi",
-      "description": "Description",
-      "empty": "No book lists yet.",
-      "emptyBooks": "This book list is empty.",
-      "bookCount": "{count} book(s)",
-      "remove": "Remove from list",
-      "created": "Book list created",
-      "deleted": "Book list deleted",
-      "addSuccess": "Added to the book list",
-      "removeSuccess": "Removed from the book list"
-    },
-    "browse": {
-      "authors": "Authors",
-      "series": "Series",
-      "publishers": "Publishers",
-      "tags": "Tags",
-      "count": "{count}",
-      "empty": "Nothing here yet."
     },
     "upload": {
       "title": "Upload books",
@@ -462,6 +461,18 @@
     "empty": {
       "noBooks": "The library is still empty. Upload your first book to get started.",
       "noResults": "No books match your filters."
+    },
+    "mindmap": {
+      "title": "Mindmap",
+      "view": "Mindmap",
+      "backToBook": "Back to book",
+      "loading": "Loading mindmap…",
+      "notFound": "No mindmap for this book",
+      "loadFailed": "Failed to load the mindmap",
+      "hint": "Drag to pan · scroll/pinch to zoom · click a circle to expand",
+      "nodes": "nodes",
+      "domains": "domains",
+      "cards": "cards"
     }
   }
 }

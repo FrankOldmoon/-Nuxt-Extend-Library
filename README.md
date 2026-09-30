@@ -4,7 +4,7 @@
 
 它借鉴 [talebook](https://github.com/talebook/talebook) 的产品形态，但实现上遵循三个克制的前提：
 
-- **不引入第三方依赖**。EPUB/OPF 解析、ZIP 读写、分页排版、原生格式转换全部在模块内实现，因此它可以在一个裸 Node 进程里跑起来，也不会给宿主带来任何新包。
+- **第三方依赖克制**。EPUB/OPF 解析、ZIP 读写、分页排版、原生格式转换全部在模块内实现；唯二的例外是**思维导图**（`d3` + `markmap-lib` + `markmap-view`，自绘导图引擎的成本远高于复用）——它们声明在模块自己的 `package.json` 里，在模块目录内独立安装（`cd modules/library && npm install`），不给宿主带来任何 import。
 - **只做私有的书库**。电子书文件**不经过**宿主的公开文件路由，只能通过模块自己的鉴权接口下载，避免书籍被外部索引到。
 - **复用而不重写宿主能力**。账号、权限、配置、文件存储都沿用宿主已有的机制，模块只通过少量约定好的"接缝"接入。
 
@@ -43,6 +43,7 @@
 
 ### 阅读与批注
 - EPUB 2/3 阅读器：**分页 / 双页 / 滚动**三种版面，字号、行距、页宽、三种主题（明亮 / 护眼 / 暗色）、全屏、目录、书签、进度同步。
+- **思维导图**：markmap 全屏视图（默认展开 3 层，点击节点继续展开），带 节点/域/卡 统计徽标与采集完整度说明；卡片与详情页对带导图的书显示入口。离线导图包（`library-offline.html`）可经 `scripts/import-mindmaps.mjs` 一键入库。
 - **划线高亮**：6 种颜色 × 6 种线型（底色高亮 + 单/双/点/虚/波浪下划线），可为任意划线**输入笔记**。
 - **书内全文搜索**：CJK 友好的索引方案，缺失索引时按需重建。
 - **朗读**：Web Speech API，句级切分、逐句高亮跟随、自动续读下一章。
@@ -67,7 +68,7 @@
 | 数据库 | **PostgreSQL**（复用宿主的 `pg` 连接池） |
 | 宿主 | 一个提供下文[接入契约](#对宿主的依赖接入契约)所列接缝的 Nuxt 4 项目 |
 
-模块**没有自己的 `package.json`**：它不声明也不安装依赖，一切运行时依赖（Nuxt、Nuxt UI、`@nuxtjs/i18n`、Drizzle、`pg`）都由宿主提供。
+模块**独立安装自有依赖**：`modules/library/package.json` 声明 `d3`、`markmap-lib`、`markmap-view`，首次使用前在模块目录内执行一次 `npm install`（生成 `modules/library/node_modules`，Vite/TS 从模块文件向上解析会自动命中）；其余运行时依赖（Nuxt、Nuxt UI、`@nuxtjs/i18n`、Drizzle、`pg`）都由宿主提供。宿主根目录的 `.npmrc` 使用 `node-linker=hoisted`（扁平布局，见文末"已知限制"）。
 
 ### 作为 Nuxt Layer 接入
 
@@ -92,8 +93,8 @@ EXTENDS_MODULES="./modules/library"
 
 ### 启用后会发生什么
 
-1. **接管站点根路径**：宿主的落地页（`/`）会被移除，首页直接是目录页。是否接管只由 Layer 挂载开关决定——**想保留原首页就不挂载本层**；`library.clearSiteNavigation` 管的是另一件事：是否清空宿主**顶部导航**（书架自带分区导航，留着旧链接容易让人困惑）。
-2. **挂载模块页面**：`/library/**` 下的目录、书架、详情、阅读等页面由本层提供。
+1. **接管站点根路径**：宿主的落地页（`/`）会被移除，首页直接是目录页；所有页面挂在站点根（`/book/:id`、`/read/:id`…），**没有 `/library` 路径前缀**。是否接管只由 Layer 挂载开关决定——**想保留原首页就不挂载本层**；`library.clearSiteNavigation` 管的是另一件事：是否清空宿主**顶部导航**（书架自带分区导航，留着旧链接容易让人困惑）。
+2. **挂载模块页面**：`/`、`/book/:id`、`/read/:id`、`/mindmap/:id` 等页面由本层提供。
 3. **建表与升级**：启动时执行幂等迁移（`CREATE TABLE IF NOT EXISTS` / `ADD COLUMN IF NOT EXISTS`），可安全地在每次启动重复执行。
 4. **注册后台**：把目录表注册进宿主的通用后台 CRUD 与侧边栏菜单，管理员可直接查看与维护。
 5. **种下教程书**：仅当书目为空时，生成并入库一本使用教程，作为唯一的初始书籍。
@@ -102,12 +103,13 @@ EXTENDS_MODULES="./modules/library"
 
 | 路由 | 内容 |
 | --- | --- |
-| `/` 与 `/library` | 目录页（全部图书）：搜索、筛选、排序、批量管理、回收站 |
-| `/library/shelf` | 我的书架：在读 / 已读完 / 收藏 |
-| `/library/collections`、`/library/collections/:id` | 书单列表与详情 |
-| `/library/authors`、`/library/series`、`/library/publishers`、`/library/tags` | 浏览页 |
-| `/library/book/:id` | 书籍详情（文件、元数据、统计、编辑与转换入口） |
-| `/library/read/:id` | 阅读器（EPUB 走自定义阅读器，PDF 等交给浏览器内置） |
+| `/` | 目录页（全部图书）：搜索、筛选、排序、批量管理、回收站 |
+| `/shelf` | 我的书架：在读 / 已读完 / 收藏 |
+| `/collections`、`/collections/:id` | 书单列表与详情 |
+| `/authors`、`/series`、`/publishers`、`/tags` | 浏览页 |
+| `/book/:id` | 书籍详情（文件、元数据、统计、编辑与转换入口） |
+| `/read/:id` | 阅读器（EPUB 走自定义阅读器，PDF 等交给浏览器内置） |
+| `/mindmap/:id` | 思维导图（markmap 全屏视图，仅对带导图的书显示入口） |
 
 ---
 
@@ -117,8 +119,12 @@ EXTENDS_MODULES="./modules/library"
 modules/library/
 ├── index.ts                     # Nuxt 模块入口：pages:extend 接管 `/`
 ├── nuxt.config.ts               # Layer 的 i18n locale 声明
+├── package.json                 # 模块自有依赖（d3 + markmap-lib + markmap-view）
+├── scripts/
+│   └── import-mindmaps.mjs      # 从 library-offline.html 导入 74 本书导图
+├── library-offline.html         # 离线单文件导图查看器（导入源，也可独立使用）
 ├── app/
-│   ├── pages/library/           # 目录页（含回收站）、我的书架、详情、阅读、书单、浏览页
+│   ├── pages/                   # 站点根页面：目录（含回收站）、书架、详情、阅读、书单、浏览页
 │   ├── components/library/      # 15 个组件（含 EpubReader、批注工具条与面板）
 │   ├── composables/             # useLibrary / useReaderTts / useReaderAnnotations
 │   └── utils/                   # annotations.ts（批注词汇表）、reader.ts（排版数学）
@@ -150,6 +156,8 @@ modules/library/
 | `lib_favorites` | 收藏 |
 | `lib_reading_progress` | 阅读进度（百分比、位置、状态） |
 | `lib_bookmarks` | 书签 / 划线 / 笔记（`type` 区分；划线含 `style`、`color`、`start_offset`、`end_offset`） |
+| `lib_book_chapters` | 章节纯文本索引（全文搜索来源，不进后台 CRUD） |
+| `lib_mindmaps` | 思维导图大纲（markmap Markdown + 节点/域/卡统计 + 完整度说明，一书一份） |
 
 软删除统一用 `deleted_at`：书籍与文件一起进出回收站，保证目录视图与存储统计始终一致。
 
@@ -361,13 +369,16 @@ LIBRARY_ENABLED=true node_modules/.bin/nuxt typecheck
 
 ### 代码约定
 
-- **不新增依赖**：需要的能力要么自己实现（见 `server/utils/zip.ts`、`ebook.ts`、`html.ts`），要么交给可选的外部程序（Calibre），要么复用宿主。
+- **第三方依赖克制**：模块自有依赖只允许进 `modules/library/package.json`（当前仅思维导图三件套），其余能力要么自己实现，要么复用宿主，要么交给可选的外部程序（Calibre）。
 - **纯逻辑抽成纯函数**放在 `app/utils` 或 `server/utils`，组件与路由只做编排——这样排版数学之类的易错逻辑才能被单测覆盖。
 - **注释解释"为什么"**，尤其是那些看起来可以更简单、但实际不能的地方（例如栏间距为什么是页边距的下限、批注为什么不存像素坐标）。
 
 ---
 
 ## 已知限制
+
+- **导图只读**：`/mindmap/:id` 是查看器，暂无在线编辑；大纲更新靠重跑导入脚本或直接改 `lib_mindmaps.content`。
+- **模块依赖独立安装**：`modules/library/node_modules` 由模块内 `npm install` 生成，不走宿主的 pnpm store；克隆模块后需手动执行一次。
 
 - **PDF 不参与全文索引**，也不走本模块的阅读器（交给浏览器内置渲染），因此没有划线批注能力。
 - **TTS 完全依赖浏览器与操作系统**：可用语音、音质、是否需要用户先与页面交互，都因设备而异；服务端不参与。
