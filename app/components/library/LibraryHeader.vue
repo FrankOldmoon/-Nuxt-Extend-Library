@@ -19,7 +19,7 @@ const { t } = useI18n()
 const route = useRoute()
 
 const links = computed(() => [
-  { key: 'books', to: '', icon: 'i-lucide-layout-grid', label: t('library.allBooks') },
+  { key: 'books', to: '/', icon: 'i-lucide-layout-grid', label: t('library.allBooks') },
   { key: 'shelf', to: '/shelf', icon: 'i-lucide-bookmark', label: t('library.shelf.title') },
   { key: 'collections', to: '/collections', icon: 'i-lucide-list', label: t('library.collections.title') },
   { key: 'authors', to: '/authors', icon: 'i-lucide-user-pen', label: t('library.browse.authors') },
@@ -29,7 +29,7 @@ const links = computed(() => [
 ])
 
 function isActive(to: string): boolean {
-  if (to === '') return route.path === ''
+  if (to === '/') return route.path === '/'
   return route.path === to || route.path.startsWith(`${to}/`)
 }
 </script>

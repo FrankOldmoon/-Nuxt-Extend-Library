@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * Library — the shelf (all books) at ``.
+ * Library — the shelf (all books) at `/`.
  *
  * Filter state lives in the URL query so shelves are shareable/bookmarkable.
  * Anonymous visitors only ever see public books (enforced server-side).

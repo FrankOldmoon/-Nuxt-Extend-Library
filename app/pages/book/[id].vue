@@ -46,7 +46,7 @@ async function removeBook() {
   try {
     await cDelete(`/api/library/books/${book.value.id}`)
     toast.add({ title: t('library.messages.deleted'), color: 'success' })
-    await navigateTo('')
+    await navigateTo('/')
   } catch (e) {
     toast.add({ title: extractErrorMessage(e, t('library.messages.deleteFailed')), color: 'error' })
   }
@@ -58,7 +58,7 @@ useSeoMeta(() => ({ title: () => book.value?.title ?? t('library.title') }))
 <template>
   <UContainer class="py-10">
     <UButton
-      to=""
+      to="/"
       icon="i-lucide-arrow-left"
       color="neutral"
       variant="ghost"

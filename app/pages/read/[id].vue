@@ -86,7 +86,7 @@ const errorMessage = computed(() => {
           :label="t('library.reader.backToBook')"
         />
         <UButton
-          to=""
+          to="/"
           icon="i-lucide-library"
           color="primary"
           variant="soft"
