@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * Library — the shelf (all books) at `/library`.
+ * Library — the shelf (all books) at ``.
  *
  * Filter state lives in the URL query so shelves are shareable/bookmarkable.
  * Anonymous visitors only ever see public books (enforced server-side).
@@ -29,7 +29,10 @@ const status = ref(String(route.query.status ?? ''))
 const sort = ref(String(route.query.sort ?? 'recent'))
 const view = ref<'grid' | 'list'>(route.query.view === 'list' ? 'list' : 'grid')
 const page = ref(Number(route.query.page) || 1)
-const pageSize = 24
+// Page sizes are multiples of 20 so the last grid row stays full at every
+// column count the card grid uses (2 / 4 / 5).
+const PAGE_SIZES = [20, 40, 60] as const
+const pageSize = ref(Number(route.query.pageSize) || 20)
 
 const params = computed(() => ({
   q: q.value || undefined,
@@ -43,7 +46,7 @@ const params = computed(() => ({
   sort: sort.value,
   order: sort.value === 'title' || sort.value === 'author' ? 'asc' : 'desc',
   page: page.value,
-  pageSize
+  pageSize: pageSize.value
 }))
 
 const { data, status: fetchStatus, refresh } = useLibraryBooks(params)
@@ -76,6 +79,9 @@ const statusItems = computed(() => [
   { label: t('library.status.finished'), value: 'finished' }
 ])
 
+const pageSizeItems = computed(() =>
+  PAGE_SIZES.map(n => ({ label: `${n} / ${t('library.view.perPageUnit')}`, value: n })))
+
 const categoryOptions = computed(() => (facets.value as LibraryFacets | undefined)?.categories ?? [])
 
 function applyQuery(patch: Record<string, unknown>) {
@@ -102,6 +108,7 @@ watch(() => route.query, (query) => {
   sort.value = String(query.sort ?? 'recent')
   view.value = query.view === 'list' ? 'list' : 'grid'
   page.value = Number(query.page) || 1
+  pageSize.value = Number(query.pageSize) || 20
 })
 
 function commitSearch() {
@@ -144,6 +151,12 @@ function setView(value: 'grid' | 'list') {
 function goPage(p: number) {
   page.value = p
   applyQuery({ page: p === 1 ? undefined : p })
+}
+
+function setPageSize(n: number) {
+  pageSize.value = n
+  page.value = 1
+  applyQuery({ pageSize: n === 20 ? undefined : n, page: undefined })
 }
 
 // ---- Mutations ----
@@ -504,15 +517,25 @@ useSeoMeta({ title: () => t('library.title') })
 
       <div
         v-if="data && data.total > pageSize"
-        class="mt-8 flex items-center justify-between gap-3"
+        class="mt-8 flex flex-wrap items-center justify-between gap-3"
       >
         <span class="text-sm text-muted">{{ t('library.filters.results', { count: total }) }}</span>
-        <UPagination
-          :page="page"
-          :total="data.total"
-          :items-per-page="pageSize"
-          @update:page="goPage"
-        />
+        <div class="flex items-center gap-3">
+          <USelect
+            :model-value="pageSize"
+            :items="pageSizeItems"
+            size="sm"
+            class="w-28"
+            :aria-label="t('library.view.perPage')"
+            @update:model-value="setPageSize(Number($event))"
+          />
+          <UPagination
+            :page="page"
+            :total="data.total"
+            :items-per-page="pageSize"
+            @update:page="goPage"
+          />
+        </div>
       </div>
     </template>
 

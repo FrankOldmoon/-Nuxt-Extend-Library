@@ -6,7 +6,7 @@ const { data: facets } = useLibraryFacets()
 const items = computed(() => (facets.value?.tags ?? []).map(tag => ({
   label: `#${tag.tag}`,
   count: tag.count,
-  to: `/library?tag=${encodeURIComponent(tag.tag)}`
+  to: `?tag=${encodeURIComponent(tag.tag)}`
 })))
 
 useSeoMeta({ title: () => t('library.browse.tags') })

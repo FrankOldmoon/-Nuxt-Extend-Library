@@ -6,7 +6,7 @@ const { data: facets } = useLibraryFacets()
 const items = computed(() => (facets.value?.series ?? []).map(s => ({
   label: s.name,
   count: s.count,
-  to: `/library?series=${encodeURIComponent(s.name)}`
+  to: `?series=${encodeURIComponent(s.name)}`
 })))
 
 useSeoMeta({ title: () => t('library.browse.series') })

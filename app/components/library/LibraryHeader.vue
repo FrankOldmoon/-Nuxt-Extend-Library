@@ -19,17 +19,17 @@ const { t } = useI18n()
 const route = useRoute()
 
 const links = computed(() => [
-  { key: 'books', to: '/library', icon: 'i-lucide-layout-grid', label: t('library.allBooks') },
-  { key: 'shelf', to: '/library/shelf', icon: 'i-lucide-bookmark', label: t('library.shelf.title') },
-  { key: 'collections', to: '/library/collections', icon: 'i-lucide-list', label: t('library.collections.title') },
-  { key: 'authors', to: '/library/authors', icon: 'i-lucide-user-pen', label: t('library.browse.authors') },
-  { key: 'series', to: '/library/series', icon: 'i-lucide-library', label: t('library.browse.series') },
-  { key: 'publishers', to: '/library/publishers', icon: 'i-lucide-building-2', label: t('library.browse.publishers') },
-  { key: 'tags', to: '/library/tags', icon: 'i-lucide-tags', label: t('library.browse.tags') }
+  { key: 'books', to: '', icon: 'i-lucide-layout-grid', label: t('library.allBooks') },
+  { key: 'shelf', to: '/shelf', icon: 'i-lucide-bookmark', label: t('library.shelf.title') },
+  { key: 'collections', to: '/collections', icon: 'i-lucide-list', label: t('library.collections.title') },
+  { key: 'authors', to: '/authors', icon: 'i-lucide-user-pen', label: t('library.browse.authors') },
+  { key: 'series', to: '/series', icon: 'i-lucide-library', label: t('library.browse.series') },
+  { key: 'publishers', to: '/publishers', icon: 'i-lucide-building-2', label: t('library.browse.publishers') },
+  { key: 'tags', to: '/tags', icon: 'i-lucide-tags', label: t('library.browse.tags') }
 ])
 
 function isActive(to: string): boolean {
-  if (to === '/library') return route.path === '/library'
+  if (to === '') return route.path === ''
   return route.path === to || route.path.startsWith(`${to}/`)
 }
 </script>

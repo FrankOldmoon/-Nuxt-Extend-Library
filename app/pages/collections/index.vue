@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * Library — book lists (collections) index at `/library/collections`.
+ * Library — book lists (collections) index at `/collections`.
  */
 import type { LibraryCollection } from '../../../composables/useLibrary'
 
@@ -71,7 +71,7 @@ useSeoMeta({ title: () => t('library.collections.title') })
       >
         <div class="flex items-start justify-between gap-3">
           <NuxtLink
-            :to="`/library/collections/${collection.id}`"
+            :to="`/collections/${collection.id}`"
             class="flex-1"
           >
             <h3 class="font-semibold text-highlighted hover:text-primary">

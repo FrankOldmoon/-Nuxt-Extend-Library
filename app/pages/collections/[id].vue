@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * Library — a single book list at `/library/collections/:id`.
+ * Library — a single book list at `/collections/:id`.
  */
 import type { LibraryBook, LibraryCollection } from '../../../../composables/useLibrary'
 
@@ -53,7 +53,7 @@ async function removeCollection() {
   try {
     await cDelete(`/api/library/collections/${id}`)
     toast.add({ title: t('library.collections.deleted'), color: 'success' })
-    await navigateTo('/library/collections')
+    await navigateTo('/collections')
   } catch (e) {
     toast.add({ title: extractErrorMessage(e, t('library.messages.deleteFailed')), color: 'error' })
   }
@@ -65,7 +65,7 @@ useSeoMeta(() => ({ title: () => collection.value?.name ?? t('library.collection
 <template>
   <UContainer class="py-10">
     <UButton
-      to="/library/collections"
+      to="/collections"
       icon="i-lucide-arrow-left"
       color="neutral"
       variant="ghost"

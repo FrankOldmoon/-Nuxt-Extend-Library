@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * Library — book detail at `/library/book/:id`.
+ * Library — book detail at `/book/:id`.
  *
  * Metadata, description, tags, attached files (download / inline preview) and
  * the primary actions (read online, favourite, edit, delete, add to list).
@@ -46,7 +46,7 @@ async function removeBook() {
   try {
     await cDelete(`/api/library/books/${book.value.id}`)
     toast.add({ title: t('library.messages.deleted'), color: 'success' })
-    await navigateTo('/library')
+    await navigateTo('')
   } catch (e) {
     toast.add({ title: extractErrorMessage(e, t('library.messages.deleteFailed')), color: 'error' })
   }
@@ -58,7 +58,7 @@ useSeoMeta(() => ({ title: () => book.value?.title ?? t('library.title') }))
 <template>
   <UContainer class="py-10">
     <UButton
-      to="/library"
+      to=""
       icon="i-lucide-arrow-left"
       color="neutral"
       variant="ghost"
@@ -149,7 +149,7 @@ useSeoMeta(() => ({ title: () => book.value?.title ?? t('library.title') }))
                   <NuxtLink
                     v-for="(a, i) in book.authors"
                     :key="a.id"
-                    :to="`/library?author=${encodeURIComponent(a.name)}`"
+                    :to="`?author=${encodeURIComponent(a.name)}`"
                     class="text-primary hover:underline"
                   >{{ a.name }}<span v-if="i < book.authors.length - 1">, </span></NuxtLink>
                 </template>
@@ -162,10 +162,18 @@ useSeoMeta(() => ({ title: () => book.value?.title ?? t('library.title') }))
             <div class="flex flex-wrap items-center gap-2">
               <UButton
                 v-if="canRead"
-                :to="`/library/read/${book.id}`"
+                :to="`/read/${book.id}`"
                 icon="i-lucide-book-open"
                 color="primary"
                 :label="t('library.actions.read')"
+              />
+              <UButton
+                v-if="book.hasMindmap"
+                :to="`/mindmap/${book.id}`"
+                icon="i-lucide-git-fork"
+                color="neutral"
+                variant="soft"
+                :label="t('library.mindmap.view')"
               />
               <UButton
                 v-if="isLoggedIn"
@@ -229,7 +237,7 @@ useSeoMeta(() => ({ title: () => book.value?.title ?? t('library.title') }))
               </dt>
               <dd>
                 <NuxtLink
-                  :to="`/library?series=${encodeURIComponent(book.series.name)}`"
+                  :to="`?series=${encodeURIComponent(book.series.name)}`"
                   class="text-primary hover:underline"
                 >
                   {{ book.series.name }}<template v-if="book.seriesIndex"> #{{ book.seriesIndex }}</template>
@@ -242,7 +250,7 @@ useSeoMeta(() => ({ title: () => book.value?.title ?? t('library.title') }))
               </dt>
               <dd>
                 <NuxtLink
-                  :to="`/library?publisher=${encodeURIComponent(book.publisher.name)}`"
+                  :to="`?publisher=${encodeURIComponent(book.publisher.name)}`"
                   class="text-primary hover:underline"
                 >
                   {{ book.publisher.name }}
@@ -324,7 +332,7 @@ useSeoMeta(() => ({ title: () => book.value?.title ?? t('library.title') }))
             <UButton
               v-for="tag in book.tags"
               :key="tag"
-              :to="`/library?tag=${encodeURIComponent(tag)}`"
+              :to="`?tag=${encodeURIComponent(tag)}`"
               size="xs"
               color="primary"
               variant="soft"

@@ -33,7 +33,7 @@ onMounted(async () => {
     <header class="flex flex-wrap items-center justify-between gap-2 border-b border-default px-3 py-2">
       <div class="flex min-w-0 items-center gap-2">
         <UButton
-          :to="`/library/book/${bookId}`"
+          :to="`/book/${bookId}`"
           icon="i-lucide-arrow-left"
           size="sm"
           color="neutral"

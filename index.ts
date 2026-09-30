@@ -5,9 +5,10 @@
  * project.
  *
  * While `LIBRARY_ENABLED=true` the module:
- *   - takes over the site root: the host landing page (`/`) is removed and
- *     replaced with the library shelf (mirrors the nav module);
- *   - serves its own pages under `/library/**` (provided by this layer);
+ *   - owns the site root: the shelf is the homepage at `/` — the host landing
+ *     page is removed;
+ *   - serves its pages at the site root (`/book/:id`, `/read/:id`,
+ *     `/mindmap/:id`, …) with no `/library` path prefix;
  *   - registers the catalogue tables into the host dashboard CRUD
  *     (see `server/plugins/library.ts`).
  */
@@ -27,14 +28,16 @@ export default defineNuxtModule({
     const moduleDir = resolver.resolve('.')
 
     nuxt.hook('pages:extend', (pages) => {
-      // Drop the host's landing page and mount the library shelf at `/`.
+      // Both the host and this layer may define a page at `/`, and Nuxt's
+      // layer conflict resolution is not deterministic in our favour — so
+      // drop EVERY page mounted at `/` and mount the shelf explicitly.
       for (let i = pages.length - 1; i >= 0; i--) {
         if (pages[i]?.path === '/') pages.splice(i, 1)
       }
       pages.unshift({
         name: 'library-home',
         path: '/',
-        file: join(moduleDir, 'app/pages/library/index.vue')
+        file: join(moduleDir, 'app/pages/index.vue')
       })
     })
   }

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * Library — online reader at `/library/read/:id`.
+ * Library — online reader at `/read/:id`.
  *
  * Picks a viewer from the book's attached formats:
  *   - EPUB          → the custom paged/scroll reader;
@@ -79,14 +79,14 @@ const errorMessage = computed(() => {
       </p>
       <div class="flex items-center gap-2">
         <UButton
-          :to="`/library/book/${id}`"
+          :to="`/book/${id}`"
           icon="i-lucide-arrow-left"
           color="neutral"
           variant="soft"
           :label="t('library.reader.backToBook')"
         />
         <UButton
-          to="/library"
+          to=""
           icon="i-lucide-library"
           color="primary"
           variant="soft"
@@ -160,7 +160,7 @@ const errorMessage = computed(() => {
         @click="attachOpen = true"
       />
       <UButton
-        :to="`/library/book/${id}`"
+        :to="`/book/${id}`"
         icon="i-lucide-arrow-left"
         color="neutral"
         variant="ghost"

@@ -1191,7 +1191,7 @@ const voiceItems = computed(() =>
     <header class="library-reader__bar">
       <div class="flex items-center gap-1">
         <UButton
-          :to="`/library/book/${content.bookId}`"
+          :to="`/book/${content.bookId}`"
           icon="i-lucide-arrow-left"
           size="sm"
           color="neutral"
